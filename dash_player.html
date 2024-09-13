@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dash.js player</title>
+    <style>
+        video {
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <video id="videoPlayer" controls></video>
+</div>
+<script src="http://cdn.dashjs.org/v3.1.0/dash.all.min.js"></script>
+<script>
+    var player, duration, started; //NOTE: Do not edit this line ("duration" and "started" variables required by grader)
+    (function(){
+        var url = "https://cse4265-2024-101481573.lm.r.appspot.com/C2_2/manifest.mpd";
+        player = dashjs.MediaPlayer().create();
+        player.initialize(document.querySelector("#videoPlayer"), url, true);
+    })();
+</script>
+</body>
+</html>

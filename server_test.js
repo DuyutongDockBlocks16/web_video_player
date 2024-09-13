@@ -3,6 +3,7 @@ const path = require('path');
 const { Storage } = require('@google-cloud/storage');
 
 // ffmpeg -i demo.mp4 -c:v libx265 -g 120 -keyint_min 120 -sc_threshold 0 -c:a copy -movflags +faststart demo_h265.mp4
+// Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 600 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
 
 const app = express();
 const PORT = process.env.PORT || 8080;

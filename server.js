@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Storage } = require('@google-cloud/storage');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -18,6 +19,55 @@ const bucketName = 'cse4265-2024-101481573.appspot.com';
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to my server!</h1>');
 });
+
+// http://localhost:8080/C2_2/manifest.mpd
+// https://cse4265-2024-101481573.lm.r.appspot.com/C2_2/manifest.mpd
+app.get('/:foldername/:filename', async (req, res) => {
+
+  try {
+    const folderName = req.params.foldername
+    const fileName = req.params.filename
+    const bucket = storage.bucket(bucketName);
+    const fullFilePath = `${folderName}/${fileName}`;
+    const file = bucket.file(fullFilePath);
+
+    // 使用 Google Cloud Storage 的 `createReadStream` 来读取文件
+    const readStream = file.createReadStream();
+
+    // 设置正确的 MIME 类型，假设你的文件是 MPD 文件
+    res.setHeader('Content-Type', 'application/xml');
+
+    // 通过管道将文件流传递给响应对象
+    readStream.pipe(res);
+
+    // 处理读取流的错误
+    readStream.on('error', (err) => {
+      console.error('Error reading file from Cloud Storage:', err);
+      res.status(500).send('Error reading file');
+    });
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Failed to process request.');
+  }
+});
+
+// http://localhost:8080/player
+// https://cse4265-2024-101481573.lm.r.appspot.com/player
+app.get('/player', async (req, res) => {
+
+  try {
+
+    let html_path = path.join(__dirname, 'dash_player.html');
+
+    res.sendFile(html_path);
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Failed to process request.');
+  }
+});
+
 
 // Route to serve video files from Google Cloud Storage
 app.get('/video/:filename', async (req, res) => {
