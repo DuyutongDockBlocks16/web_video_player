@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dash.js player</title>
+    <style>
+        video {
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <video id="videoPlayer" controls></video>
+</div>
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+<script>
+    var player, duration, started; // Required variables for grading
+    var url = "https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"; // Video URL
+
+    // Initialize the dash.js player
+    player = dashjs.MediaPlayer().create();
+
+    // Configure the ABR settings
+    player.updateSettings({
+        streaming: {
+            abr: {
+                useDefaultABRRules: false, // Disable default ABR rules
+                ABRStrategy: 'abrBola', // Primarily use buffer-based bitrate adaptation
+                initialBitrate: {
+                    video: 1000 // Set initial bitrate to 1 Mbit/s
+                },
+                minBitrate: {
+                    video: 500 // Set minimum bitrate to 500 kbit/s
+                },
+                autoSwitchBitrate: {
+                    video: true // Allow automatic bitrate switching
+                }
+            },
+            buffer: {
+                fastSwitchEnabled: false // Disable replacing segments already in buffer
+            }
+        }
+    });
+
+    // Initialize the player with the video URL
+    player.initialize(document.querySelector("#videoPlayer"), url, true);
+</script>
+</body>
+</html>

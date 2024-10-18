@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dash.js player</title>
+    <style>
+        video {
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <video id="videoPlayer" controls></video>
+</div>
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+<script src="./BitrateRule.js"></script>
+<script>
+    var player, duration, started; // Required variables for grading
+    var url = "https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd"; // Video URL
+
+    // Initialize the dash.js player
+    player = dashjs.MediaPlayer().create();
+
+    // 禁用默认的ABR规则，并引入自定义规则
+    player.updateSettings({
+        streaming: {
+            abr: {
+                useDefaultABRRules: false // 禁用默认的ABR规则
+            }
+        }
+    });
+
+    // 添加自定义的ABR规则
+    player.addABRCustomRule('qualitySwitchRules', 'BitrateRule', BitrateRule);
+
+
+    // Initialize the player with the video URL
+    player.initialize(document.querySelector("#videoPlayer"), url, true);
+</script>
+</body>
+</html>

@@ -68,6 +68,34 @@ app.get('/player', async (req, res) => {
   }
 });
 
+app.get('/playerv2', async (req, res) => {
+
+  try {
+
+    let html_path = path.join(__dirname, 'dash_player_v2.html');
+
+    res.sendFile(html_path);
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Failed to process request.');
+  }
+});
+
+app.get('/playerv3', async (req, res) => {
+
+  try {
+
+    let html_path = path.join(__dirname, 'dash_player_v3.html');
+
+    res.sendFile(html_path);
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Failed to process request.');
+  }
+});
+
 
 // Route to serve video files from Google Cloud Storage
 app.get('/video/:filename', async (req, res) => {
