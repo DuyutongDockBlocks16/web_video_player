@@ -147,6 +147,37 @@ app.get('/video/:filename', async (req, res) => {
 });
 
 
+app.get('/video/cdn/:filename', async (req, res) => {
+
+  try {
+    // const folderName = req.params.foldername
+    const fileName = req.params.filename
+    const bucket = storage.bucket(bucketName);
+    const fullFilePath = `hfr_dash_video/${fileName}`;
+    const file = bucket.file(fullFilePath);
+
+    // 使用 Google Cloud Storage 的 `createReadStream` 来读取文件
+    const readStream = file.createReadStream();
+
+    // 设置正确的 MIME 类型，假设你的文件是 MPD 文件
+    res.setHeader('Content-Type', 'application/xml');
+
+    // 通过管道将文件流传递给响应对象
+    readStream.pipe(res);
+
+    // 处理读取流的错误
+    readStream.on('error', (err) => {
+      console.error('Error reading file from Cloud Storage:', err);
+      res.status(500).send('Error reading file');
+    });
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Failed to process request.');
+  }
+});
+
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

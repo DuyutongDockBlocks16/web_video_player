@@ -1,0 +1,17 @@
+defaultService: projects/cse4265-2024-101481573/global/backendServices/desktop
+name: path-matcher-1
+routeRules:
+  - matchRules:
+      - headerMatches:
+          - exactMatch: mobile
+            headerName: Device-Type
+        prefixMatch: /
+    priority: 0
+    service: projects/cse4265-2024-101481573/global/backendServices/mobile
+  - matchRules:
+      - headerMatches:
+          - exactMatch: desktop
+            headerName: Device-Type
+        prefixMatch: /
+    priority: 1
+    service: projects/cse4265-2024-101481573/global/backendServices/desktop
